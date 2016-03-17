@@ -1,4 +1,4 @@
-![Code Climate](https://codeclimate.com/github/re-fort/TV-kko)
+[![Code Climate](https://codeclimate.com/github/re-fort/TV-kko/badges/gpa.svg)](https://codeclimate.com/github/re-fort/TV-kko)
 ![MIT License](http://img.shields.io/badge/license-MIT-blue.svg?style=flat)
 
 TV-kko
