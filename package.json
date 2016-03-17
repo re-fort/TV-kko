@@ -1,0 +1,21 @@
+{
+  "name": "TV-kko",
+  "version": "0.1.0",
+  "description": "Search TV programs by the casts",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ." ,
+    "release:osx": "electron-packager . TV-kko --out=release --platform=darwin --arch=x64 --version=0.36.4 --overwrite --icon=assets/img/tv-kko.icns --ignore=gist --ignore=release --ignore=demo --ignore=README.md",
+    "release:win": "electron-packager . TV-kko --out=release --platform=win32 --arch=all --version=0.36.4 --overwrite --icon=assets/img/tv-kko.ico --ignore=gist --ignore=release --ignore=demo --ignore=README.md --version-string.OriginalFilename=\"TV-kko.exe\" --version-string.FileVersion=\"0.1.0\" --version-string.ProductVersion=\"0.1.0\" --version-string.ProductName=\"TV-kko\""
+  },
+  "author": "re-fort",
+  "license": "MIT",
+  "repository": "https://github.com/re-fort/TV-kko",
+  "bug": "https://github.com/re-fort/TV-kko/issues",
+  "dependencies": {
+    "cheerio-httpcli": "^0.6.5",
+    "request": "^2.69.0",
+    "vue": "^1.0.17"
+  },
+  "devDependencies": {}
+}

@@ -1,0 +1,139 @@
+@keyframes left-circle {
+  0% {
+    left: 0;
+  }
+  50% {
+    left: 24px;
+  }
+  100% {
+    left: 0;
+  }
+}
+
+@keyframes left-circle {
+  0% {
+    left: 0;
+  }
+  50% {
+    left: 24px;
+  }
+  100% {
+    left: 0;
+  }
+}
+
+@keyframes left-circle {
+  0% {
+    left: 0;
+  }
+  50% {
+    left: 24px;
+  }
+  100% {
+    left: 0;
+  }
+}
+
+@keyframes right-circle {
+  0% {
+    left: 24px;
+    z-index: 1;
+  }
+  49% {
+    z-index: 1;
+  }
+  50% {
+    left: 0;
+    z-index: 10;
+  }
+  100% {
+    left: 24px;
+    z-index: 10;
+  }
+}
+
+@keyframes right-circle {
+  0% {
+    left: 24px;
+    z-index: 1;
+  }
+  49% {
+    z-index: 1;
+  }
+  50% {
+    left: 0;
+    z-index: 10;
+  }
+  100% {
+    left: 24px;
+    z-index: 10;
+  }
+}
+
+@keyframes right-circle {
+  0% {
+    left: 24px;
+    z-index: 1;
+  }
+  49% {
+    z-index: 1;
+  }
+  50% {
+    left: 0;
+    z-index: 10;
+  }
+  100% {
+    left: 24px;
+    z-index: 10;
+  }
+}
+
+.image--loading {
+  background: none;
+  position: relative;
+  width: 48px;
+  height: 48px;
+  margin-left: 13vw;
+}
+
+.content--loading {
+  background: none;
+  position: relative;
+  width: 48px;
+  height: 48px;
+  margin-left: 30vw;
+  margin-top: 200px;
+}
+
+.image--loading > div,
+.content--loading > div {
+  width: 24px;
+  height: 24px;
+  border-radius: 12px;
+  position: absolute;
+  top: 12px;
+}
+
+.image--loading > div:nth-of-type(1),
+.content--loading > div:nth-of-type(1) {
+  left: 0;
+  background: #dc4a61;
+  z-index: 5;
+  animation: left-circle 1s linear infinite;
+}
+
+.image--loading > div:nth-of-type(2),
+.content--loading > div:nth-of-type(2) {
+  left: 24px;
+  background: #f7faf8;
+  animation: right-circle 1s linear infinite;
+}
+
+@media screen and (max-width: 45em) {
+  .image--loading {
+    margin-left: 45vw;
+  }
+  .content--loading {
+    margin-left: 45vw;
+  }
+}
