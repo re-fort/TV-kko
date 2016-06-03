@@ -13,9 +13,9 @@
   "repository": "https://github.com/re-fort/TV-kko",
   "bug": "https://github.com/re-fort/TV-kko/issues",
   "dependencies": {
-    "cheerio-httpcli": "^0.6.8",
-    "request": "^2.72.0",
-    "vue": "^1.0.22-csp"
+    "cheerio-httpcli": "0.6.8",
+    "request": "2.72.0",
+    "vue": "1.0.24"
   },
   "devDependencies": {}
 }
