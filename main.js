@@ -3,6 +3,7 @@
 const app = require('electron').app
 const path = app.getAppPath()
 const BrowserWindow = require('electron').BrowserWindow
+const Menu = require('electron').Menu
 const ipcMain = require('electron').ipcMain
 const cheerio = require('./renderer/util/cheerio')
 const file = require('./renderer/util/file')
@@ -21,6 +22,62 @@ app.on("ready", () => {
   mainWindow.on("closed", () => {
     mainWindow = null
   })
+})
+
+app.once('ready', () => {
+  const template = [{
+    label: 'Edit',
+    submenu: [{
+      type: 'separator'
+    },
+    {
+      label: 'Cut',
+      accelerator: 'CmdOrCtrl+X',
+      role: 'cut'
+    },
+    {
+      label: 'Copy',
+      accelerator: 'CmdOrCtrl+C',
+      role: 'copy'
+    },
+    {
+      label: 'Paste',
+      accelerator: 'CmdOrCtrl+V',
+      role: 'paste'
+    },
+    {
+      label: 'Select All',
+      accelerator: 'CmdOrCtrl+A',
+      role: 'selectall'
+    }]
+  },
+  {
+    label: 'View',
+    submenu: [{
+      label: 'Reload',
+      accelerator: 'CmdOrCtrl+R',
+      click(item, focusedWindow) {
+        if (focusedWindow) focusedWindow.reload()
+      }
+    }]
+  },
+  {
+    label: 'Window',
+    role: 'window',
+    submenu: [{
+      label: 'Minimize',
+      accelerator: 'CmdOrCtrl+M',
+      role: 'minimize'
+    },
+    {
+      label: 'Close',
+      accelerator: 'CmdOrCtrl+W',
+      role: 'close'
+    }]
+  }]
+
+  const menu = Menu.buildFromTemplate(template)
+  Menu.setApplicationMenu(menu)
 })
 
 ipcMain.on('async-downloadCastsFile', (event) => {
