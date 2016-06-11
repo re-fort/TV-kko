@@ -6,6 +6,7 @@ const fs = require('fs')
 const path = require('path')
 const prefecturesJSON = require('./prefectures.json')
 let castsJSON = require('./casts.json')
+const moment = require('./util/moment')
 const baseDir = remote.app.getAppPath()
 const usrImgDir = remote.app.getPath('userData')
 let baseImgDir = path.join(baseDir, 'assets')
@@ -41,7 +42,9 @@ let app = new Vue({
     programs: [],
     fetchCounter: 0,
     renderable: false,
-    showModal: false
+    showModal: false,
+    autoCheck: false,
+    autoCheckTime: 19
   },
 
   ready() {
@@ -82,13 +85,18 @@ let app = new Vue({
 
     let selectedArea = this.getLocalStorageByKey('setting', 'myArea')
     let selectedPlatformId = this.getLocalStorageByKey('setting', 'myPlatformId')
+    let selectedAutoCheck = this.getLocalStorageByKey('setting', 'autoCheck')
+    let selectedAutoCheckTime = this.getLocalStorageByKey('setting', 'autoCheckTime')
 
     if (selectedArea !== '') this.myArea = selectedArea
     if (selectedPlatformId !== '') this.myPlatformId = selectedPlatformId
+    if (selectedAutoCheck !== '') this.autoCheck = selectedAutoCheck
+    if (selectedAutoCheckTime !== '') this.autoCheckTime = selectedAutoCheckTime
 
     this.prefectures = prefecturesJSON
     this.casts = castsJSON
     this.getMyCasts()
+    this.setTimer()
   },
 
   methods: {
@@ -111,6 +119,12 @@ let app = new Vue({
         },
         {
           key: 'myPlatformId', value: this.myPlatformId
+        },
+        {
+          key: 'autoCheck', value: this.autoCheck
+        },
+        {
+          key: 'autoCheckTime', value: this.autoCheckTime
         }
       ]
 
@@ -120,6 +134,21 @@ let app = new Vue({
     setInput(value) {
       this.query = value
       this.name = value
+    },
+
+    setTimer() {
+      clearTimeout()
+      if (!this.autoCheck) return
+
+      let currentDate = moment.getCurrentDate()
+      let timerDate = moment.getTimerDate(currentDate, this.autoCheckTime)
+      let diffMiliSeconds = moment.getDiff(currentDate, timerDate)
+
+      setTimeout(() => {
+        this.addActiveClass(-1, '')
+        this.fetchProgramList()
+        this.setTimer()
+      }, diffMiliSeconds)
     },
 
     //
@@ -137,7 +166,7 @@ let app = new Vue({
         })
       }
 
-      return filteredArray ? filteredArray[0].value : ''
+      return filteredArray.length != 0 ? filteredArray[0].value : ''
     },
 
     getMyCasts() {
