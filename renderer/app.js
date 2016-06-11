@@ -331,13 +331,19 @@ let app = new Vue({
 
         this.programs.some((p, i) => {
           if (p.pid === obj.pid) {
-            app.$data.programs[i].imgPaths.push(imgPath)
+            if (! this.programs[i].imgs.some((img) => {
+              if (img.name === obj.name && img.path === imgPath)
+                return true
+            })) {
+              this.programs[i].imgs.push({name: obj.name, path: imgPath})
+            }
             isAdd = true
+            return true
           }
         })
 
         if (!isAdd) {
-          obj.imgPaths.push(imgPath)
+          obj.imgs.push({name: obj.name, path: imgPath})
           this.programs.push(obj)
         }
       }
