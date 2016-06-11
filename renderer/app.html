@@ -96,7 +96,7 @@
                   </button>
                 </a>
                 <span>
-                  <img v-for="imgPath in program.imgPaths" class="img-circle media-object pull-left" width="32" height="32" :src="imgPath ? imgPath : ''">
+                  <img v-for="img in program.imgs" class="img-circle media-object pull-left" width="32" height="32" :src="img.path ? img.path : ''" :title="img.name" />
                 </span>
               </div>
             </div>

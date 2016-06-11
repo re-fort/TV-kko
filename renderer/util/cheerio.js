@@ -1,8 +1,8 @@
 'use strict'
 
 const cl = require('cheerio-httpcli')
-const fs     = require('fs')
-const path   = require('path')
+const fs = require('fs')
+const path = require('path')
 
 const cheerio = {
   fetchImage(event, name, imgDir) {
@@ -95,7 +95,7 @@ const cheerio = {
         channel,
         url,
         name,
-        imgPaths: []
+        imgs: []
       }
       response.push(obj)
     })
