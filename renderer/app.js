@@ -229,7 +229,7 @@ let app = new Vue({
     },
 
     fetchProgramList() {
-      if (! this.myCasts.some((c) => {
+      if (this.name.length === 1 && !this.myCasts.some((c) => {
         if (c.name === this.name) return true
       })) {
         this.activeIndex = -99
