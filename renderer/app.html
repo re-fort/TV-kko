@@ -23,58 +23,89 @@
       <!-- Nav -->
       <nav class="menu">
         <ul class="list-group">
-          <li class="list-group-header">
-            <input class="form-control form-search" type="text" placeholder="タレント登録" v-model="query">
-            <button class="pull-right search-button" @click="fetchImage()">
-              <span class="icon icon-user"></span>
-              追加
-            </button>
+          <li class="list-group-type">
+            <span class="icon icon-user" @click="showType = 'user'"></span>
+            <span class="icon icon-monitor" @click="showType = 'program'"></span>
+            <span id="show-modal" class="icon icon-cog" @click="showModal=true"></span>
           </li>
-          <div class="image--loading" style="display: none;">
-            <div></div>
-            <div></div>
-          </div>
-          <template v-if="query">
-            <ul class="list-scroll" transition="staggered" stagger="10">
-              <li v-for="cast in casts | filterBy query" class="list-group-item" @click="setInput(cast.name), fetchImage()">
-                {{ cast.name }}
-              </li>
-            </ul>
-          </template>
         </ul>
-        <ul class="list-group list-scroll">
-          <template v-if="!query">
-            <li id="cAll"
-              class="list-group-item"
-              :class="-1 == activeIndex ? 'active' : ''"
-              @click="addActiveClass(-1, ''), fetchProgramList()">
-              <img class="img-circle media-object pull-left" src="../assets/img/no_name.png" width="48" height="48" />
-              <div class="media-body">
-                <strong>すべて</strong>
-              </div>
-            </li>
-            <li v-for="myCast in myCasts"
-              id="c{{$index}}"
-              class="list-group-item"
-              :class="$index == activeIndex ? 'active' : ''"
-              @click="addActiveClass($index, myCast.name), fetchProgramList()">
-              <img class="img-circle media-object pull-left" :src="myCast.imgPath" width="48" height="48" />
-              <div class="media-body">
-                <strong>{{ myCast.name }}</strong>
-                <span class="pull-right icon icon-cancel-circled" @click="setName(myCast.name), removeMyCast();"></span>
-              </div>
-            </li>
-          </template>
-        </ul>
+        <template v-if="showType === 'user'">
           <ul class="list-group">
-            <li class="list-group-header list-cog">
-              <template v-if="!query">
-                <button id="show-modal" @click="showModal=true"
-                  <span class="icon icon-cog" />
-                </button>
-              </template>
+            <li class="list-group-header">
+              <input class="form-control form-search" type="text" placeholder="タレント登録" v-model="castQuery">
+              <button class="pull-right search-button" @click="fetchImage()">
+                <span class="icon icon-user"></span>
+                追加
+              </button>
+            </li>
+            <div class="image--loading" style="display: none;">
+              <div></div>
+              <div></div>
+            </div>
+            <template v-if="castQuery">
+              <ul class="list-cast-scroll" transition="staggered" stagger="10">
+                <li v-for="cast in casts | filterBy castQuery" class="list-group-item" @click="setInput(cast.name), fetchImage()">
+                  {{ cast.name }}
+                </li>
+              </ul>
+            </template>
+          </ul>
+          <ul class="list-group list-cast-scroll">
+            <template v-if="!castQuery">
+              <li id="cAll"
+                class="list-group-item"
+                :class="-1 == activeIndex ? 'active' : ''"
+                @click="addActiveClass(-1, ''), fetchProgramList()">
+                <img class="img-circle media-object pull-left" src="../assets/img/no_name.png" width="48" height="48" />
+                <div class="media-body">
+                  <strong>すべて</strong>
+                </div>
+              </li>
+              <li v-for="myCast in myCasts"
+                id="c{{$index}}"
+                class="list-group-item"
+                :class="$index == activeIndex ? 'active' : ''"
+                @click="addActiveClass($index, myCast.name), fetchProgramList()">
+                <img class="img-circle media-object pull-left" :src="myCast.imgPath" width="48" height="48" />
+                <div class="media-body">
+                  <strong>{{ myCast.name }}</strong>
+                  <span class="pull-right icon icon-cancel-circled" @click="setName(myCast.name), removeMyCast();" />
+                </div>
+              </li>
+            </template>
+          </ul>
+        </template>
+        <template v-if="showType === 'program'">
+          <ul class="list-group">
+            <li class="list-group-header">
+              <input class="form-control" type="text" placeholder="除外番組登録" v-model="programQuery" />
+            </li>
+            <li class="list-group-header">
+              <select class="form-control form-search-type" v-model="programSearchType">
+                <option value="1">で始まる</option>
+                <option value="2">を含む</option>
+                <option value="3">で終わる</option>
+              </select>
+              <button class="pull-right search-button" @click="addExProgram()">
+                <span class="icon icon-monitor"></span>
+                追加
+              </button>
             </li>
           </ul>
+          <ul class="list-group list-program-scroll">
+            <li v-for="myExProgram in myExPrograms"
+              id="eP{{$index}}"
+              class="list-group-item">
+              <div class="media-body">
+                <template v-if="myExProgram.searchType === '1'"><strong>(始)</strong></template>
+                <template v-if="myExProgram.searchType === '2'"><strong>(含)</strong></template>
+                <template v-if="myExProgram.searchType === '3'"><strong>(終)</strong></template>
+                <strong>{{ myExProgram.title }}</strong>
+                <span class="pull-right icon icon-cancel-circled" @click="removeMyExProgram(myExProgram);" />
+              </div>
+            </li>
+          </ul>
+        </template>
       </nav>
 
       <!-- Content -->
@@ -125,24 +156,20 @@
                 <label>放送波</label>
               </li>
               <li>
-                <input type="radio" name="stationPlatformIds" value="1" v-model="myPlatformId" @change="setLocalStorage()">
-                  地上波
-                </input>
+                <input type="radio" name="stationPlatformIds" value="1" v-model="myPlatformId" @change="setLocalStorage()" />
+                地上波
               </li>
               <li>
-                <input type="radio" name="stationPlatformIds" value="2" v-model="myPlatformId" @change="setLocalStorage()">
-                  BSデジタル
-                </input>
+                <input type="radio" name="stationPlatformIds" value="2" v-model="myPlatformId" @change="setLocalStorage()" />
+                BSデジタル
               </li>
               <li>
-                <input type="radio" name="stationPlatformIds" value="5" v-model="myPlatformId" @change="setLocalStorage()">
-                  スカパー！
-                </input>
+                <input type="radio" name="stationPlatformIds" value="5" v-model="myPlatformId" @change="setLocalStorage()" />
+                スカパー！
               </li>
               <li>
-                <input type="radio" name="stationPlatformIds" value="4" v-model="myPlatformId" @change="setLocalStorage()">
-                  スカパー！プレミアサービス
-                </input>
+                <input type="radio" name="stationPlatformIds" value="4" v-model="myPlatformId" @change="setLocalStorage()" />
+                スカパー！プレミアサービス
               </li>
             </ul>
             <ul class="list-group modal-list-cog">
