@@ -5,8 +5,8 @@
   "main": "main.js",
   "scripts": {
     "start": "electron ." ,
-    "release:osx": "electron-packager . TV-kko --out=release --platform=darwin --arch=x64 --version=0.36.4 --overwrite --icon=assets/img/tv-kko.icns --ignore=gist --ignore=release --ignore=demo --ignore=README.md",
-    "release:win": "electron-packager . TV-kko --out=release --platform=win32 --arch=all --version=0.36.4 --overwrite --icon=assets/img/tv-kko.ico --ignore=gist --ignore=release --ignore=demo --ignore=README.md --version-string.OriginalFilename=\"TV-kko.exe\" --version-string.FileVersion=\"0.1.0\" --version-string.ProductVersion=\"0.1.0\" --version-string.ProductName=\"TV-kko\""
+    "release:osx": "electron-packager . TV-kko --out=release --platform=darwin --arch=x64 --version=1.2.2 --overwrite --icon=assets/img/tv-kko.icns --ignore=gist --ignore=release --ignore=demo --ignore=README.md",
+    "release:win": "electron-packager . TV-kko --out=release --platform=win32 --arch=all --version=1.2.2 --overwrite --icon=assets/img/tv-kko.ico --ignore=gist --ignore=release --ignore=demo --ignore=README.md --version-string.OriginalFilename=\"TV-kko.exe\" --version-string.FileVersion=\"0.2.0\" --version-string.ProductVersion=\"0.2.0\" --version-string.ProductName=\"TV-kko\""
   },
   "author": "re-fort",
   "license": "MIT",
