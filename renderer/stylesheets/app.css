@@ -105,6 +105,20 @@ input[type="radio"] {
   text-overflow: ellipsis;
 }
 
+.list-group-type {
+  padding: 20px;
+  text-align: center;
+}
+
+.list-group-type > span {
+  padding: 0 10px;
+  cursor: pointer;
+}
+
+.list-group-header {
+  padding: 20px;
+}
+
 .list-group-item {
   padding: 10px 20px;
   font-size: 12px;
@@ -124,26 +138,21 @@ input[type="radio"] {
   background-color: #dc4a61;
 }
 
-.list-group-header {
-  padding: 20px;
-}
-
 .list-area {
   padding-left: 60px;
   padding-right: 60px;
 }
 
-.list-scroll {
-  max-height: calc(100vh - 16em);
+.list-cast-scroll {
+  max-height: calc(100vh - 18em);
   overflow-x: hidden;
   overflow-y: scroll;
 }
 
-.list-cog {
-  position: absolute;
-  bottom: 0;
-  left: 110px;
-  text-align: center;
+.list-program-scroll {
+  max-height: calc(100vh - 22em);
+  overflow-x: hidden;
+  overflow-y: scroll;
 }
 
 .media-object {
@@ -175,7 +184,7 @@ input[type="radio"] {
   outline: none;
 }
 
-.form-search {
+.form-search, .form-search-type {
   width: 200px;
 }
 
@@ -248,6 +257,10 @@ input[type="radio"] {
 
 .detail-button:hover {
   background: #dc4a61;
+}
+
+.exProgram {
+  overflow-y: scroll
 }
 
 .modal-mask {
@@ -344,6 +357,10 @@ input[type="radio"] {
   padding-right: 5px;
 }
 
+.icon-monitor:before {
+  content: '\e8ab';
+}
+
 .icon-switch:before {
   content: '\e896';
 }
@@ -378,11 +395,13 @@ input[type="radio"] {
   .header {
     padding-top: 3em;
   }
+
   .logo {
     width: 100%;
     height: 140px;
     z-index: 2000;
   }
+
   .icon-plus-circled {
     display: block;
   }
@@ -390,10 +409,12 @@ input[type="radio"] {
   .content {
     margin: 0;
   }
+
   body,
   .container {
     overflow: auto;
   }
+
   .menu {
     z-index: 1000;
     width: 100%;
@@ -401,22 +422,20 @@ input[type="radio"] {
     transform: translate3d(-100%, 0, 0);
     transition: transform 0.5s;
   }
+
   .icon-switch {
     display: block;
   }
+
   .menu--open {
     transform: translate3d(0, 0, 0);
   }
+
+  .form-search, .form-search-type {
+    width: calc(100vw - 120px);
+  }
+
   .program-list {
     padding: 15vh 0.5em 0;
-  }
-  .list-cog {
-    display: none;
-  }
-}
-
-@media screen and (max-height: 15em) {
-  .list-cog {
-    display: none;
   }
 }
