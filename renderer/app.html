@@ -145,6 +145,22 @@
                 </input>
               </li>
             </ul>
+            <ul class="list-group modal-list-cog">
+              <li>
+                <label>自動検索(定時)</label>
+              </li>
+              <li>
+                <input type="checkbox" name="autoCheck" value="true" v-model="autoCheck" @change="setLocalStorage(), setTimer()" />
+                自動検索を行う
+              </li>
+              <li>
+                <select class="form-control" :disabled="autoCheck ? false : 'disabled'" v-model="autoCheckTime" @change="setLocalStorage(), setTimer()">
+                  <option :value="i + 1" v-for="i in 24">
+                    {{ i + 1 }}:00
+                  </option>
+                </select>
+              </li>
+            </ul>
           </div>
         </modal>
     </div>
