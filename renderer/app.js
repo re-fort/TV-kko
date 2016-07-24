@@ -185,7 +185,7 @@ let app = new Vue({
         })
       }
 
-      return filteredArray.length != 0 ? filteredArray[0].value : ''
+      return filteredArray.length !== 0 ? filteredArray[0].value : ''
     },
 
     getMyCasts() {
@@ -392,7 +392,7 @@ let app = new Vue({
             names[name] = imgPath
           }
 
-          this.programs.some((p, i) => {
+          if (! this.programs.some((p, i) => {
             if (p.pid === obj.pid) {
               if (! this.programs[i].imgs.some((img) => {
                 if (img.name === obj.name && img.path === imgPath)
@@ -400,12 +400,9 @@ let app = new Vue({
               })) {
                 this.programs[i].imgs.push({name: obj.name, path: imgPath})
               }
-              isAdd = true
               return true
             }
-          })
-
-          if (!isAdd) {
+          })) {
             obj.imgs.push({name: obj.name, path: imgPath})
             this.programs.push(obj)
           }
