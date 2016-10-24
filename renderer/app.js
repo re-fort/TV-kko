@@ -12,46 +12,50 @@ const usrImgDir = remote.app.getPath('userData')
 let baseImgDir = path.join(baseDir, 'assets')
     baseImgDir = path.join(baseImgDir, 'img')
 
-let Vue = require('vue')
+let Vue = require('vue/dist/vue')
 
 Vue.component('modal', {
-  template: '#modal-template',
-  props: {
-    show: {
-      type: Boolean,
-      required: true,
-      twoWay: true
-    }
-  }
+  template: '#modal-template'
 })
 
 let app = new Vue({
   el: '#app',
 
-  data: {
-    extensions: ['.jpg', '.png'],
-    defaultImage: 'no_name.png',
-    showType: 'user',
-    activeIndex: -99,
-    castQuery: '',
-    programQuery: '',
-    programSearchType: '2',
-    myArea: 23,
-    myPlatformId: 1,
-    name: '',
-    prefectures: [],
-    casts: [],
-    myCasts: [],
-    programs: [],
-    myExPrograms: [],
-    fetchCounter: 0,
-    renderable: false,
-    showModal: false,
-    autoCheck: false,
-    autoCheckTime: 19
+  data () {
+    return {
+      extensions: ['.jpg', '.png'],
+      defaultImage: 'no_name.png',
+      showType: 'user',
+      activeIndex: -99,
+      castQuery: '',
+      programQuery: '',
+      programSearchType: '2',
+      myArea: 23,
+      myPlatformId: 1,
+      name: '',
+      prefectures: [],
+      casts: [],
+      myCasts: [],
+      programs: [],
+      myExPrograms: [],
+      fetchCounter: 0,
+      renderable: false,
+      showModal: false,
+      autoCheck: false,
+      autoCheckTime: 19
+    }
   },
 
-  ready() {
+  computed: {
+    filteredCasts: function () {
+      let castQuery = this.castQuery
+      return this.casts.filter(function (cast) {
+        return cast.name.indexOf(castQuery) !== -1
+      })
+    }
+  },
+
+  created () {
     //
     // イベントハンドラ
     //

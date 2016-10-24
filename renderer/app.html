@@ -44,7 +44,7 @@
             </div>
             <template v-if="castQuery">
               <ul class="list-cast-scroll" transition="staggered" stagger="10">
-                <li v-for="cast in casts | filterBy castQuery" class="list-group-item" @click="setInput(cast.name), fetchImage()">
+                <li v-for="cast in filteredCasts" class="list-group-item" @click="setInput(cast.name), fetchImage()">
                   {{ cast.name }}
                 </li>
               </ul>
@@ -61,11 +61,11 @@
                   <strong>すべて</strong>
                 </div>
               </li>
-              <li v-for="myCast in myCasts"
-                id="c{{$index}}"
+              <li v-for="(myCast, index) in myCasts"
+                :id="'c' + index"
                 class="list-group-item"
-                :class="$index == activeIndex ? 'active' : ''"
-                @click="addActiveClass($index, myCast.name), fetchProgramList()">
+                :class="index == activeIndex ? 'active' : ''"
+                @click="addActiveClass(index, myCast.name), fetchProgramList()">
                 <img class="img-circle media-object pull-left" :src="myCast.imgPath" width="48" height="48" />
                 <div class="media-body">
                   <strong>{{ myCast.name }}</strong>
@@ -93,8 +93,8 @@
             </li>
           </ul>
           <ul class="list-group list-program-scroll">
-            <li v-for="myExProgram in myExPrograms"
-              id="eP{{$index}}"
+            <li v-for="(myExProgram, index) in myExPrograms"
+              :id="'eP' + index"
               class="list-group-item">
               <div class="media-body">
                 <template v-if="myExProgram.searchType === '1'"><strong>(始)</strong></template>
@@ -136,7 +136,7 @@
       </div>
 
       <!-- Modal -->
-      <modal :show.sync="showModal">
+      <modal v-if="showModal" @close="showModal = false">
           <h3 slot="header">設定</h3>
           <div slot="body">
             <ul class="list-group modal-list-cog">
@@ -195,7 +195,7 @@
 
   <!-- Modal-template -->
   <script type="x/template" id="modal-template">
-    <div class="modal-mask" v-show="show" transition="modal">
+    <div class="modal-mask" transition="modal">
       <div class="modal-wrapper">
         <div class="modal-container">
 
@@ -212,7 +212,7 @@
           </div>
 
           <div class="modal-footer">
-            <button class="modal-close-button" @click="show=false">
+            <button class="modal-close-button" @click="$emit('close')">
               閉じる
             </button>
           </div>
