@@ -34,6 +34,7 @@ let app = new Vue({
       programSearchType: '2',
       myArea: 23,
       myPlatformId: 1,
+      myNasneIp: '',
       name: '',
       prefectures: [],
       casts: [],
@@ -41,6 +42,7 @@ let app = new Vue({
       programs: [],
       myPrograms: [],
       myExPrograms: [],
+      scheduledList: [],
       fetchCounter: 0,
       renderable: false,
       showModal: false,
@@ -84,9 +86,19 @@ let app = new Vue({
           return 0
         })
 
+        this.updateScheduled()
         this.renderable = true
         this.fetchStatusChange('fetchProgramList', 'End')
       }
+    })
+
+    ipcRenderer.on('async-fetchReservedList-reply', (ev, arg) => {
+      if (arg.error) {
+        alert('nasneの録画予約情報更新に失敗しました。')
+      }
+      
+      this.scheduledList = arg.list
+      this.updateScheduled()
     })
 
     //
@@ -106,11 +118,13 @@ let app = new Vue({
       let selectedPlatformId = this.getLocalStorageByKey('setting', 'myPlatformId')
       let selectedAutoCheck = this.getLocalStorageByKey('setting', 'autoCheck')
       let selectedAutoCheckTime = this.getLocalStorageByKey('setting', 'autoCheckTime')
+      let selectedNasneIp = this.getLocalStorageByKey('setting', 'myNasneIp')
 
       if (selectedArea !== '') this.myArea = selectedArea
       if (selectedPlatformId !== '') this.myPlatformId = selectedPlatformId
       if (selectedAutoCheck !== '') this.autoCheck = selectedAutoCheck
       if (selectedAutoCheckTime !== '') this.autoCheckTime = selectedAutoCheckTime
+      if (selectedNasneIp !== '') this.myNasneIp = selectedNasneIp
 
       this.prefectures = prefecturesJSON
       this.casts = castsJSON
@@ -118,6 +132,7 @@ let app = new Vue({
       this.getMyPrograms()
       this.getMyExPrograms()
       this.setTimer()
+      this.fetchReservedList()
     },
 
     initPrograms() {
@@ -168,6 +183,9 @@ let app = new Vue({
         },
         {
           key: 'autoCheckTime', value: this.autoCheckTime
+        },
+        {
+          key: 'myNasneIp', value: this.myNasneIp
         }
       ]
 
@@ -302,6 +320,11 @@ let app = new Vue({
       if (target === 'fetchProgramList') {
         this.toggleDisplay('.content--loading', isStart)
       }
+    },
+
+    fetchReservedList() {
+      if (this.myNasneIp === '') return
+      ipcRenderer.send('async-fetchReservedList', {ip: this.myNasneIp})
     },
 
     //
@@ -483,6 +506,23 @@ let app = new Vue({
       }
       else {
         el.classList.add('menu--open')
+      }
+    },
+
+    //
+    // update.*
+    //
+    updateScheduled() {
+      this.programs.forEach((e, i) => {
+        this.programs[i].isScheduled = false
+      })
+      for (let scheduled of this.scheduledList) {
+        this.programs.some((program, i) => {
+          if (program.dateTimeMs === scheduled.dateTimeMs && program.sid === scheduled.sid) {
+            this.programs[i].isScheduled = true
+            return true
+          }
+        })
       }
     }
   }
