@@ -39,6 +39,7 @@ let app = new Vue({
       casts: [],
       myCasts: [],
       programs: [],
+      myPrograms: [],
       myExPrograms: [],
       fetchCounter: 0,
       renderable: false,
@@ -187,7 +188,7 @@ let app = new Vue({
       let diffMiliSeconds = moment.getDiff(currentDate, timerDate)
 
       setTimeout(() => {
-        this.addActiveClass(-1, '')
+        this.setSelected(-99, '', 'all')
         this.fetchProgramList()
         this.setTimer()
       }, diffMiliSeconds)
