@@ -80,21 +80,26 @@ const cheerio = {
       if (utileListProperty.length === 1) return response
 
       let pid = $(this).find('h2 a').attr('href').split('/')[2].split('.')[0]
+      let sid = parseInt(pid.slice(2, 6))
       let dateArray = utileListProperty[1].split(' ')
       let dateString = `${dateArray[0] + dateArray[1]} ${dateArray[2]}${dateArray[3]}${dateArray[4]}`
       let dateTime = pid.slice(6, 18)
+      let dateTimeMs = Date.parse(`${dateTime.slice(0, 4)}/${dateTime.slice(4, 6)}/${dateTime.slice(6, 8)} ${dateTime.slice(8, 10)}:${dateTime.slice(10, 12)}`)
       let title = $(this).find('h2 a').text()
       let channel = utileListProperty[2]
       let url = `${baseUrl}cat=${platformId}&area=${area}&pid=${pid}&from=tw`
 
       let obj = {
         pid,
+        sid,
         date: dateString,
         dateTime,
+        dateTimeMs,
         title,
         channel,
         url,
         name,
+        isScheduled: false,
         imgs: []
       }
       response.push(obj)

@@ -1,4 +1,4 @@
-"use strict"
+'use strict'
 
 const app = require('electron').app
 const path = app.getAppPath()
@@ -7,6 +7,7 @@ const Menu = require('electron').Menu
 const ipcMain = require('electron').ipcMain
 const cheerio = require('./renderer/util/cheerio')
 const file = require('./renderer/util/file')
+const nasne = require('./renderer/util/nasne')
 
 let mainWindow = null
 
@@ -90,4 +91,8 @@ ipcMain.on('async-fetchImage', (event, args) => {
 
 ipcMain.on('async-fetchProgramList', (event, args) => {
   cheerio.fetchProgramList(event, args.area, args.name, args.platformId, args.index)
+})
+
+ipcMain.on('async-fetchReservedList', (event, args) => {
+  nasne.fetchReservedList(event, args.ip)
 })

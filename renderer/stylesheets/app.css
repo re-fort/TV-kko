@@ -83,6 +83,10 @@ input[type="radio"] {
   z-index: 1000;
 }
 
+.disabled {
+  color: rgba(206,206,206,0.3);
+}
+
 .img-circle {
   border-radius: 50%;
 }
@@ -112,6 +116,9 @@ input[type="radio"] {
 
 .list-group-type > span {
   padding: 0 10px;
+}
+
+.list-group-type > span:not(.disabled) {
   cursor: pointer;
 }
 
@@ -349,6 +356,10 @@ input[type="radio"] {
   padding-right: 16px;
 }
 
+.icon-arrows-ccw:before {
+  content: '\e891';
+}
+
 .icon-cog:before {
   content: '\e855';
 }
@@ -360,6 +371,11 @@ input[type="radio"] {
 .icon-calendar:before {
   content: '\e85b';
   padding-right: 5px;
+}
+
+.icon-clock:before {
+  content: '\e862';
+  color: #dc4a61;
 }
 
 .icon-level-down:before {
