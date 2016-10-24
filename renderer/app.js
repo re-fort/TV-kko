@@ -26,6 +26,8 @@ let app = new Vue({
       extensions: ['.jpg', '.png'],
       defaultImage: 'no_name.png',
       showType: 'user',
+      showSubType: '',
+      searchType: '',
       activeIndex: -99,
       castQuery: '',
       programQuery: '',
@@ -112,6 +114,7 @@ let app = new Vue({
       this.prefectures = prefecturesJSON
       this.casts = castsJSON
       this.getMyCasts()
+      this.getMyPrograms()
       this.getMyExPrograms()
       this.setTimer()
     },
@@ -126,13 +129,29 @@ let app = new Vue({
     //
     // set.*
     //
+    setSelected(id, name, searchType) {
+      this.setActiveIndex(id)
+      this.setName(name)
+      this.setSearchType(searchType)
+    },
+
+    setActiveIndex(id) {
+      this.activeIndex = id
+    },
+
     setName(name) {
       if (name === '') {
-        this.name = this.getLocalStorageByKey('name', '')
+        let allName = this.getLocalStorageByKey('name', '')
+        let allProgram = this.getLocalStorageByKey('program', '')
+        this.name = allName.concat(allProgram)
       }
       else {
         this.name = name
       }
+    },
+
+    setSearchType(searchType) {
+      this.searchType = searchType
     },
 
     setLocalStorage() {
@@ -218,6 +237,10 @@ let app = new Vue({
       return imgPath
     },
 
+    getMyPrograms() {
+      this.myPrograms = JSON.parse(localStorage.getItem('program')) || []
+    },
+
     getMyExPrograms() {
       this.myExPrograms = JSON.parse(localStorage.getItem('exProgram')) || []
     },
@@ -233,10 +256,17 @@ let app = new Vue({
     },
 
     fetchProgramList() {
-      if (typeof this.name === 'string' && !this.myCasts.some((c) => {
+      if (this.searchType === 'user' && !this.myCasts.some((c) => {
         if (c.name === this.name) return true
       })) {
-        this.activeIndex = -99
+        this.setActiveIndex(-99)
+        return
+      }
+
+      if (this.searchType === 'program' && !this.myPrograms.some((p) => {
+        if (p === this.name) return true
+      })) {
+        this.setActiveIndex(-99)
         return
       }
 
@@ -293,12 +323,20 @@ let app = new Vue({
       this.castQuery = ''
     },
 
-    addActiveClass(id, name) {
-      this.activeIndex = id
-      this.setName(name)
+    addMyProgram() {
+      if (this.programQuery === '') return
+      if (! this.myPrograms.some((p) => {
+        if (p === this.programQuery)
+          return true
+      })) {
+        this.myPrograms.push(this.programQuery)
+        localStorage.setItem('program', JSON.stringify(this.myPrograms))
+      }
+
+      this.programQuery = ''
     },
 
-    addExProgram() {
+    addMyExProgram() {
       if (this.programQuery === '') return
       if (! this.myExPrograms.some((p) => {
         if (p.title === this.programQuery && p.searchType === this.programSearchType)
@@ -314,9 +352,8 @@ let app = new Vue({
     //
     // remove.*
     //
-    removeMyCast() {
+    removeMyCast(name) {
       let names = JSON.parse(localStorage.getItem('name')) || []
-      let name = this.name
 
       names.some((key, i) => {
         if (key === name) {
@@ -335,6 +372,17 @@ let app = new Vue({
 
       this.deleteImageFile()
       localStorage.setItem('name', JSON.stringify(names))
+    },
+
+    removeMyProgram(title) {
+      this.myPrograms.some((p, i) => {
+        if (p === title) {
+          this.myPrograms.splice(i,1)
+          return true
+        }
+      })
+
+      localStorage.setItem('program', JSON.stringify(this.myPrograms))
     },
 
     removeMyExProgram(myExProgram) {

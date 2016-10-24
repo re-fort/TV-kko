@@ -115,6 +115,10 @@ input[type="radio"] {
   cursor: pointer;
 }
 
+.list-subType {
+  border-top: 1px dashed;
+}
+
 .list-group-header {
   padding: 20px;
 }
@@ -151,6 +155,12 @@ input[type="radio"] {
 
 .list-program-scroll {
   max-height: calc(100vh - 22em);
+  overflow-x: hidden;
+  overflow-y: scroll;
+}
+
+.list-exProgram-scroll {
+  max-height: calc(100vh - 26em);
   overflow-x: hidden;
   overflow-y: scroll;
 }
@@ -357,8 +367,20 @@ input[type="radio"] {
   padding-right: 5px;
 }
 
+.icon-minus:before {
+  content: '\e819';
+}
+
 .icon-monitor:before {
   content: '\e8ab';
+}
+
+.icon-plus:before {
+  content: '\e816';
+}
+
+.icon-search:before {
+  content: '\e803';
 }
 
 .icon-switch:before {

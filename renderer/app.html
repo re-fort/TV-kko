@@ -24,9 +24,10 @@
       <nav class="menu">
         <ul class="list-group">
           <li class="list-group-type">
-            <span class="icon icon-user" @click="showType = 'user'"></span>
-            <span class="icon icon-monitor" @click="showType = 'program'"></span>
-            <span id="show-modal" class="icon icon-cog" @click="showModal=true"></span>
+            <span class="icon icon-search" @click="setSelected(-99, '', 'all'), fetchProgramList()" title="登録した全タレント・全番組を検索します。"></span>
+            <span class="icon icon-user" @click="showType = 'user'" title="タレントを登録します。"></span>
+            <span class="icon icon-monitor" @click="showType = 'program'" title="番組・除外番組を登録します。"></span>
+            <span id="show-modal" class="icon icon-cog" @click="showModal=true" title="設定を行います。"></span>
           </li>
         </ul>
         <template v-if="showType === 'user'">
@@ -52,59 +53,81 @@
           </ul>
           <ul class="list-group list-cast-scroll">
             <template v-if="!castQuery">
-              <li id="cAll"
-                class="list-group-item"
-                :class="-1 == activeIndex ? 'active' : ''"
-                @click="addActiveClass(-1, ''), fetchProgramList()">
-                <img class="img-circle media-object pull-left" src="../assets/img/no_name.png" width="48" height="48" />
-                <div class="media-body">
-                  <strong>すべて</strong>
-                </div>
-              </li>
               <li v-for="(myCast, index) in myCasts"
                 :id="'c' + index"
                 class="list-group-item"
-                :class="index == activeIndex ? 'active' : ''"
-                @click="addActiveClass(index, myCast.name), fetchProgramList()">
+                :class="index == activeIndex && searchType === 'user' ? 'active' : ''"
+                @click="setSelected(index, myCast.name, 'user'), fetchProgramList()">
                 <img class="img-circle media-object pull-left" :src="myCast.imgPath" width="48" height="48" />
                 <div class="media-body">
                   <strong>{{ myCast.name }}</strong>
-                  <span class="pull-right icon icon-cancel-circled" @click="setName(myCast.name), removeMyCast();" />
+                  <span class="pull-right icon icon-cancel-circled" @click="removeMyCast(myCast.name)" />
                 </div>
               </li>
             </template>
           </ul>
         </template>
         <template v-if="showType === 'program'">
-          <ul class="list-group">
-            <li class="list-group-header">
-              <input class="form-control" type="text" placeholder="除外番組登録" v-model="programQuery" />
-            </li>
-            <li class="list-group-header">
-              <select class="form-control form-search-type" v-model="programSearchType">
-                <option value="1">で始まる</option>
-                <option value="2">を含む</option>
-                <option value="3">で終わる</option>
-              </select>
-              <button class="pull-right search-button" @click="addExProgram()">
-                <span class="icon icon-monitor"></span>
-                追加
-              </button>
+          <ul class="list-group list-subType">
+            <li class="list-group-type">
+              <span class="icon icon-plus" @click="showSubType = 'program-add'"></span>
+              <span class="icon icon-minus" @click="showSubType = 'program-remove'"></span>
             </li>
           </ul>
-          <ul class="list-group list-program-scroll">
-            <li v-for="(myExProgram, index) in myExPrograms"
-              :id="'eP' + index"
-              class="list-group-item">
-              <div class="media-body">
-                <template v-if="myExProgram.searchType === '1'"><strong>(始)</strong></template>
-                <template v-if="myExProgram.searchType === '2'"><strong>(含)</strong></template>
-                <template v-if="myExProgram.searchType === '3'"><strong>(終)</strong></template>
-                <strong>{{ myExProgram.title }}</strong>
-                <span class="pull-right icon icon-cancel-circled" @click="removeMyExProgram(myExProgram);" />
-              </div>
-            </li>
-          </ul>
+          <template v-if="showSubType === 'program-add'">
+            <ul class="list-group">
+              <li class="list-group-header">
+                <input class="form-control form-search" type="text" placeholder="番組登録" v-model="programQuery">
+                <button class="pull-right search-button" @click="addMyProgram()">
+                  <span class="icon icon-monitor"></span>
+                  追加
+                </button>
+              </li>
+            </ul>
+            <ul class="list-group list-program-scroll">
+              <li v-for="(myProgram, index) in myPrograms"
+                :id="'p' + index"
+                class="list-group-item"
+                :class="index == activeIndex && searchType === 'program' ? 'active' : ''"
+                @click="setSelected(index, myProgram, 'program'), fetchProgramList()">
+                <div class="media-body">
+                  <strong>{{ myProgram }}</strong>
+                  <span class="pull-right icon icon-cancel-circled" @click="removeMyProgram(myProgram)" />
+                </div>
+              </li>
+            </ul>
+          </template>
+          <template v-if="showSubType === 'program-remove'">
+            <ul class="list-group">
+              <li class="list-group-header">
+                <input class="form-control" type="text" placeholder="除外番組登録" v-model="programQuery" />
+              </li>
+              <li class="list-group-header">
+                <select class="form-control form-search-type" v-model="programSearchType">
+                  <option value="1">で始まる</option>
+                  <option value="2">を含む</option>
+                  <option value="3">で終わる</option>
+                </select>
+                <button class="pull-right search-button" @click="addMyExProgram()">
+                  <span class="icon icon-monitor"></span>
+                  追加
+                </button>
+              </li>
+            </ul>
+            <ul class="list-group list-exProgram-scroll">
+              <li v-for="(myExProgram, index) in myExPrograms"
+                :id="'eP' + index"
+                class="list-group-item">
+                <div class="media-body">
+                  <template v-if="myExProgram.searchType === '1'"><strong>(始)</strong></template>
+                  <template v-if="myExProgram.searchType === '2'"><strong>(含)</strong></template>
+                  <template v-if="myExProgram.searchType === '3'"><strong>(終)</strong></template>
+                  <strong>{{ myExProgram.title }}</strong>
+                  <span class="pull-right icon icon-cancel-circled" @click="removeMyExProgram(myExProgram);" />
+                </div>
+              </li>
+            </ul>
+          </template>
         </template>
       </nav>
 
