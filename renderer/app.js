@@ -91,7 +91,7 @@ let app = new Vue({
           return 0
         })
 
-        this.updateScheduled()
+        this.fetchReservedList()
         this.renderable = true
         this.fetchStatusChange('fetchProgramList', 'End')
       }
