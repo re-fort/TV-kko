@@ -45,7 +45,8 @@ let app = new Vue({
       scheduledList: [],
       fetchCounter: 0,
       renderable: false,
-      showModal: false,
+      showSettingModal: false,
+      showUpdateModal: false,
       autoCheck: false,
       autoCheckTime: 19
     }
@@ -66,6 +67,10 @@ let app = new Vue({
     //
     ipcRenderer.on('async-downloadCastsFile-reply', (ev, arg) => {
       castsJSON = require('./casts.json')
+    })
+
+    ipcRenderer.on('async-checkForUpdates-reply', (ev, arg) => {
+      this.showUpdateModal = arg.isOld
     })
 
     ipcRenderer.on('async-fetchImage-reply', (ev, arg) => {
@@ -113,6 +118,7 @@ let app = new Vue({
     //
     init() {
       this.downloadCastsFile()
+      this.checkForUpdates()
 
       let selectedArea = this.getLocalStorageByKey('setting', 'myArea')
       let selectedPlatformId = this.getLocalStorageByKey('setting', 'myPlatformId')
@@ -440,6 +446,13 @@ let app = new Vue({
     //
     downloadCastsFile() {
       ipcRenderer.send('async-downloadCastsFile')
+    },
+
+    //
+    // check.*
+    //
+    checkForUpdates() {
+      ipcRenderer.send('async-checkForUpdates')
     },
 
     //

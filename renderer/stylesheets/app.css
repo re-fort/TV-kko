@@ -280,6 +280,10 @@ input[type="radio"] {
   overflow-y: scroll
 }
 
+.download-link {
+  color: #dc4a61;
+}
+
 .modal-mask {
   position: fixed;
   z-index: 9998;
@@ -376,6 +380,10 @@ input[type="radio"] {
 .icon-clock:before {
   content: '\e862';
   color: #dc4a61;
+}
+
+.icon-download:before {
+  content: '\e82d';
 }
 
 .icon-level-down:before {
