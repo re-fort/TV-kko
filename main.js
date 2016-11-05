@@ -11,16 +11,16 @@ const nasne = require('./renderer/util/nasne')
 
 let mainWindow = null
 
-app.on("window-all-closed", () => {
+app.on('window-all-closed', () => {
   app.quit()
 })
 
-app.on("ready", () => {
+app.on('ready', () => {
 
   mainWindow = new BrowserWindow({ width: 1100, height: 1000, minWidth: 410 })
   mainWindow.loadURL(`file://${__dirname}/renderer/app.html`)
 
-  mainWindow.on("closed", () => {
+  mainWindow.on('closed', () => {
     mainWindow = null
   })
 })
@@ -83,6 +83,10 @@ app.once('ready', () => {
 
 ipcMain.on('async-downloadCastsFile', (event) => {
   file.downloadCastsFile(event, path)
+})
+
+ipcMain.on('async-checkForUpdates', (event) => {
+  file.checkForUpdates(event)
 })
 
 ipcMain.on('async-fetchImage', (event, args) => {

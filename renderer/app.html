@@ -27,7 +27,7 @@
             <span class="icon icon-search" @click="setSelected(-99, '', 'all'), fetchProgramList()" title="登録した全タレント・全番組を検索します。"></span>
             <span class="icon icon-user" @click="showType = 'user'" title="タレントを登録します。"></span>
             <span class="icon icon-monitor" @click="showType = 'program'" title="番組・除外番組を登録します。"></span>
-            <span id="show-modal" class="icon icon-cog" @click="showModal=true" title="設定を行います。"></span>
+            <span id="show-modal" class="icon icon-cog" @click="showSettingModal=true" title="設定を行います。"></span>
             <span class="icon icon-arrows-ccw" :class="myNasneIp !== '' ? '' : 'disabled'" @click="fetchReservedList()" title="nasneの録画予約情報を更新します。"></span>
           </li>
         </ul>
@@ -162,8 +162,8 @@
         </div>
       </div>
 
-      <!-- Modal -->
-      <modal v-if="showModal" @close="showModal = false">
+      <!-- Setting Modal -->
+      <modal v-if="showSettingModal" @close="showSettingModal = false">
           <h3 slot="header">設定</h3>
           <div slot="body">
             <ul class="list-group modal-list-cog">
@@ -221,6 +221,23 @@
               </li>
               <li>
                 <input class="form-control" type="text" placeholder="192.168.11.1" v-model="myNasneIp" @change="setLocalStorage()" />
+              </li>
+            </ul>
+          </div>
+        </modal>
+
+        <!-- Update Modal -->
+        <modal v-if="showUpdateModal" @close="showUpdateModal = false">
+          <h3 slot="header">更新</h3>
+          <div slot="body">
+            <ul class="list-group modal-list-cog">
+              <li>
+                <p>新しいバージョンのTV-kkoが利用可能です。</p>
+              </li>
+              <li>
+                <a href="https://tv-kko-release-server.herokuapp.com/download" class="download-link">
+                  <span class="icon icon-download">ダウンロード</span>
+                </a>
               </li>
             </ul>
           </div>

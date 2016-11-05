@@ -1,6 +1,7 @@
 'use strict'
 
 const fs = require('fs')
+const https = require('https')
 const request = require('request')
 
 const file = {
@@ -14,6 +15,17 @@ const file = {
         event.sender.send('async-downloadCastsFile-reply')
       }
     )
+  },
+
+  checkForUpdates(event) {
+    let currentVersion = require('../../package.json').version
+    let req = https.get('https://github.com/re-fort/TV-kko/releases/latest', function(res) {
+      res.on('data', function(str) {
+        let latestVersion = /[^/v]*$/.exec(res.headers.location)[0]
+        let isOld = latestVersion > currentVersion
+        event.sender.send('async-checkForUpdates-reply', {isOld})
+      })
+    })
   }
 }
 
