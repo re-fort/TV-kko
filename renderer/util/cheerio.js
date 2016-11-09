@@ -50,7 +50,7 @@ const cheerio = {
     })
   },
 
-  fetchProgramList(event, area, name, platformId, index) {
+  fetchProgramList(event, area, name, platformId, index = 0) {
     if (typeof name === 'object') name = name[index]
 
     cl.fetch('http://tv.so-net.ne.jp/')
