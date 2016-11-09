@@ -33,7 +33,29 @@ let app = new Vue({
       programQuery: '',
       programSearchType: '2',
       myArea: 23,
-      myPlatformId: 1,
+      myPlatformId: [1],
+      platformIds: [
+        {
+          name: '地上波',
+          value: 1,
+          selected: false
+        },
+        {
+          name: 'BSデジタル',
+          value: 2,
+          selected: false
+        },
+        {
+          name: 'スカパー！',
+          value: 5,
+          selected: false
+        },
+        {
+          name: 'スカパー！プレミアサービス',
+          value: 4,
+          selected: false
+        }
+      ],
       myNasneIp: '',
       name: '',
       prefectures: [],
@@ -80,7 +102,7 @@ let app = new Vue({
 
     ipcRenderer.on('async-fetchProgramList-reply', (ev, arg) => {
       this.createPrograms(arg.response)
-      if (typeof this.name === 'object' && this.name.length - 1 !== this.fetchCounter) {
+      if (typeof this.name === 'object' && (this.name.length - 1 * this.myPlatformId.length) !== this.fetchCounter) {
         ++this.fetchCounter
       }
       else {
@@ -127,7 +149,11 @@ let app = new Vue({
       let selectedNasneIp = this.getLocalStorageByKey('setting', 'myNasneIp')
 
       if (selectedArea !== '') this.myArea = selectedArea
-      if (selectedPlatformId !== '') this.myPlatformId = selectedPlatformId
+      if (selectedPlatformId !== '') {
+        // v0.3.0まではStringで管理しているため、Arrayに変換
+        this.myPlatformId = Array.isArray(selectedPlatformId) ? selectedPlatformId : [selectedPlatformId]
+        this.setPlatformId()
+      }
       if (selectedAutoCheck !== '') this.autoCheck = selectedAutoCheck
       if (selectedAutoCheckTime !== '') this.autoCheckTime = selectedAutoCheckTime
       if (selectedNasneIp !== '') this.myNasneIp = selectedNasneIp
@@ -218,6 +244,25 @@ let app = new Vue({
       }, diffMiliSeconds)
     },
 
+    setPlatformId() {
+      for (let id of this.myPlatformId) {
+        this.platformIds.some((platformId) => {
+          if (platformId.value === id) {
+            platformId.selected = true
+            return true
+          }
+        })
+      }
+    },
+
+    setMyPlatformId() {
+      this.myPlatformId = this.platformIds.filter((platformId) => {
+        return platformId.selected
+      }).map((platformId) => {
+        return platformId.value
+      })
+    },
+
     //
     // get.*
     //
@@ -303,15 +348,17 @@ let app = new Vue({
         return
       }
 
-      if (typeof this.name === 'object') {
-        let index = 0
-        for (let name of this.name) {
-          ipcRenderer.send('async-fetchProgramList', {area: this.myArea, name: this.name, platformId: this.myPlatformId, index})
-          ++index
+      for (let platformId of this.myPlatformId){
+        if (typeof this.name === 'object') {
+          let index = 0
+          for (let name of this.name) {
+            ipcRenderer.send('async-fetchProgramList', {area: this.myArea, name: this.name, platformId: platformId, index})
+            ++index
+          }
         }
-      }
-      else {
-        ipcRenderer.send('async-fetchProgramList', {area: this.myArea, name: this.name, platformId: this.myPlatformId, index: 0})
+        else {
+          ipcRenderer.send('async-fetchProgramList', {area: this.myArea, name: this.name, platformId: platformId})
+        }
       }
     },
 

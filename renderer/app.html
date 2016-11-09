@@ -182,21 +182,9 @@
               <li>
                 <label>放送波</label>
               </li>
-              <li>
-                <input type="radio" name="stationPlatformIds" value="1" v-model="myPlatformId" @change="setLocalStorage()" />
-                地上波
-              </li>
-              <li>
-                <input type="radio" name="stationPlatformIds" value="2" v-model="myPlatformId" @change="setLocalStorage()" />
-                BSデジタル
-              </li>
-              <li>
-                <input type="radio" name="stationPlatformIds" value="5" v-model="myPlatformId" @change="setLocalStorage()" />
-                スカパー！
-              </li>
-              <li>
-                <input type="radio" name="stationPlatformIds" value="4" v-model="myPlatformId" @change="setLocalStorage()" />
-                スカパー！プレミアサービス
+              <li v-for="platformId in platformIds">
+                <input type="checkbox" name="stationPlatformIds" :value="platformId.value" v-model="platformId.selected" @change="setMyPlatformId(), setLocalStorage()" />
+                {{ platformId.name }}
               </li>
             </ul>
             <ul class="list-group modal-list-cog">
