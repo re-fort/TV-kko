@@ -54,6 +54,11 @@ let app = new Vue({
           name: 'スカパー！プレミアサービス',
           value: 4,
           selected: false
+        },
+        {
+          name: 'AbemaTV',
+          value: 'Abema',
+          selected: false
         }
       ],
       myNasneIp: '',

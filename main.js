@@ -5,6 +5,7 @@ const path = app.getAppPath()
 const BrowserWindow = require('electron').BrowserWindow
 const Menu = require('electron').Menu
 const ipcMain = require('electron').ipcMain
+const abema = require('./renderer/util/abema')
 const cheerio = require('./renderer/util/cheerio')
 const file = require('./renderer/util/file')
 const nasne = require('./renderer/util/nasne')
@@ -94,7 +95,11 @@ ipcMain.on('async-fetchImage', (event, args) => {
 })
 
 ipcMain.on('async-fetchProgramList', (event, args) => {
-  cheerio.fetchProgramList(event, args.area, args.name, args.platformId, args.index)
+  if (args.platformId === 'Abema') {
+    abema.fetchProgramList(event, args.name, args.index)
+  } else {
+    cheerio.fetchProgramList(event, args.area, args.name, args.platformId, args.index)
+  }
 })
 
 ipcMain.on('async-fetchReservedList', (event, args) => {
