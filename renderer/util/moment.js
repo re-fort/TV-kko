@@ -7,6 +7,10 @@ const moment = {
     return m()
   },
 
+  getFormatDate(date, formatString) {
+    return m(date, formatString)
+  },
+
   getTimerDate(currentDate, hour) {
     let timerDate = this.getCurrentDate()
     timerDate.hour(hour).minute(0).second(0)
