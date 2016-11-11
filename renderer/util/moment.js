@@ -1,6 +1,7 @@
 'use strict'
 
 const m = require('moment')
+m.locale('ja', {weekdaysShort: ['日','月','火','水','木','金','土']})
 
 const moment = {
   getCurrentDate() {

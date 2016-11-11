@@ -1,6 +1,7 @@
 'use strict'
 
 const cl = require('cheerio-httpcli')
+cl.headers['Accept-Language'] = 'ja'
 const fs = require('fs')
 const path = require('path')
 
