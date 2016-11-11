@@ -1,7 +1,7 @@
 'use strict'
 
 const remote = require('electron').remote
-const ipcRenderer = require("electron").ipcRenderer
+const ipcRenderer = require('electron').ipcRenderer
 const fs = require('fs')
 const path = require('path')
 const prefecturesJSON = require('./prefectures.json')
@@ -10,7 +10,7 @@ const moment = require('./util/moment')
 const baseDir = remote.app.getAppPath()
 const usrImgDir = remote.app.getPath('userData')
 let baseImgDir = path.join(baseDir, 'assets')
-    baseImgDir = path.join(baseImgDir, 'img')
+baseImgDir = path.join(baseImgDir, 'img')
 
 let Vue = require('vue/dist/vue')
 
@@ -18,7 +18,7 @@ Vue.component('modal', {
   template: '#modal-template'
 })
 
-let app = new Vue({
+new Vue({
   el: '#app',
 
   data () {
@@ -92,7 +92,7 @@ let app = new Vue({
     //
     // イベントハンドラ
     //
-    ipcRenderer.on('async-downloadCastsFile-reply', (ev, arg) => {
+    ipcRenderer.on('async-downloadCastsFile-reply', () => {
       castsJSON = require('./casts.json')
     })
 
@@ -100,7 +100,7 @@ let app = new Vue({
       this.showUpdateModal = arg.isOld
     })
 
-    ipcRenderer.on('async-fetchImage-reply', (ev, arg) => {
+    ipcRenderer.on('async-fetchImage-reply', () => {
       this.addMyCast()
       this.fetchStatusChange('fetchImage', 'End')
     })
@@ -278,7 +278,7 @@ let app = new Vue({
       let filteredArray = []
 
       if (values !== null) {
-        filteredArray = values.filter((values, index) => {
+        filteredArray = values.filter((values) => {
           if (values.key === subKey) return true
         })
       }
@@ -288,7 +288,6 @@ let app = new Vue({
 
     getMyCasts() {
       let names = JSON.parse(localStorage.getItem('name')) || []
-      let myCasts = []
 
       for (let name of names) {
         let myCast = {
@@ -357,7 +356,7 @@ let app = new Vue({
         if (typeof this.name === 'object') {
           let index = 0
           for (let name of this.name) {
-            ipcRenderer.send('async-fetchProgramList', {area: this.myArea, name: this.name, platformId: platformId, index})
+            ipcRenderer.send('async-fetchProgramList', {area: this.myArea, name, platformId: platformId, index})
             ++index
           }
         }
@@ -523,7 +522,6 @@ let app = new Vue({
             return true
         })) {
           let name = obj.name
-          let isAdd = false
 
           if (name in names) {
             imgPath = names[name]
@@ -556,10 +554,10 @@ let app = new Vue({
     //
     toggleDisplay(elName, isBlock) {
       if (isBlock) {
-        document.querySelector(elName).style.display = "block"
+        document.querySelector(elName).style.display = 'block'
       }
       else {
-        document.querySelector(elName).style.display = "none"
+        document.querySelector(elName).style.display = 'none'
       }
     },
 

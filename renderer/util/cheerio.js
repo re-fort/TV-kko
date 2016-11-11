@@ -19,10 +19,10 @@ const cheerio = {
       let savePath = path.join(imgDir, file)
       stream.pipe(fs.createWriteStream(savePath))
     })
-    .on('error', err => {
+    .on('error', () => {
       event.sender.send('async-fetchImage-reply')
     })
-    .on('end', err => {
+    .on('end', () => {
       event.sender.send('async-fetchImage-reply')
     })
 
@@ -43,7 +43,7 @@ const cheerio = {
 
       $imgs.download()
     })
-    .catch(err => {
+    .catch(() => {
       event.sender.send('async-fetchImage-reply')
     })
     .finally(() => {
@@ -51,8 +51,6 @@ const cheerio = {
   },
 
   fetchProgramList(event, area, name, platformId, index = 0) {
-    if (typeof name === 'object') name = name[index]
-
     cl.fetch('http://tv.so-net.ne.jp/')
     .then(result => {
       let $ = result.$
@@ -61,7 +59,7 @@ const cheerio = {
         stationAreaId: area
       })
       return $('[name=changeStationAreaForm]').submit()
-    }).then(result => cl.fetch(`http://tv.so-net.ne.jp/schedulesBySearch.action?stationPlatformId=${platformId}&condition.keyword=${encodeURI(name)}`)).then(result => {
+    }).then(() => cl.fetch(`http://tv.so-net.ne.jp/schedulesBySearch.action?stationPlatformId=${platformId}&condition.keyword=${encodeURI(name)}`)).then(result => {
       let response = cheerio.createResponseObject(result.$, area, name, platformId)
       event.sender.send('async-fetchProgramList-reply', {response, index})
     }).finally(() => {
@@ -70,7 +68,7 @@ const cheerio = {
 
   createResponseObject($, area, name, platformId) {
     let response = []
-    let baseUrl = "https://tv.so-net.ne.jp/chan-toru/intent?"
+    let baseUrl = 'https://tv.so-net.ne.jp/chan-toru/intent?'
     // スカパーのIDはなぜか検索時と番組紹介時で逆にしないといけない
     if (platformId === '4') platformId = 5
     if (platformId === '5') platformId = 4

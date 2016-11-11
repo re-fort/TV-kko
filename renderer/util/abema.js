@@ -5,8 +5,6 @@ const moment = require('./moment')
 
 const abema = {
   fetchProgramList(event, name, index = 0) {
-    if (typeof name === 'object') name = name[index]
-
     //認証情報を取得してからAPI呼び出し
     let options = {
       method: 'GET',
