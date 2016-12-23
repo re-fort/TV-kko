@@ -16,7 +16,7 @@ const cheerio = {
 
     cl.download
     .on('ready', stream => {
-      let file = name + stream.url.pathname.match(/.([^.]+)$/)[0]
+      let file = name + '.jpg'
       let savePath = path.join(imgDir, file)
       stream.pipe(fs.createWriteStream(savePath))
     })
@@ -30,11 +30,11 @@ const cheerio = {
     // 並行してダウンロードすることはない
     cl.download.parallel = 1
 
-    let url = `http://talent.search.yahoo.co.jp/search?p=${encodeURI(name)}`
+    let url = `http://image.search.yahoo.co.jp/search?p=${encodeURI(name)}`
 
     cl.fetch(url)
     .then(result => {
-      let $imgs = result.$('.rw .tb a img').eq(0)
+      let $imgs = result.$('#gridlist .SeR .tb a img').eq(0)
 
       // 画像がない場合は何もしない
       if (typeof $imgs[0] === 'undefined') {
