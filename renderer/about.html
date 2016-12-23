@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="jp">
+<head>
+  <meta charset="UTF-8"/>
+  <title>TV-kko</title>
+  <link href="./stylesheets/app.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+  <!-- App -->
+  <div id="app">
+    <!-- Container -->
+    <div class="container">
+      <!-- Header -->
+      <header class="header">
+        <div class="logo">
+          <div class="tvkko-svg"></div>
+          <h2 class="heading">TV-kko</h2>
+          <span id="version">0.0.0</span>
+        </div>
+      </header>
+    </div>
+  </div>
+</body>
+
+</html>
+
+<script>
+let currentVersion = location.hash.replace('#', '')
+document.querySelector('#version').textContent = currentVersion
+</script>

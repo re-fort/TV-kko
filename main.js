@@ -27,7 +27,18 @@ app.on('ready', () => {
 })
 
 app.once('ready', () => {
-  const template = [{
+  const template = [
+  {
+    label: 'Application',
+    submenu: [{
+      type: 'separator'
+    },
+    {
+      label: 'About TV-kko',
+      click: showAbout
+    }]
+  },
+  {
     label: 'Edit',
     submenu: [{
       type: 'separator'
@@ -75,7 +86,7 @@ app.once('ready', () => {
       label: 'Close',
       accelerator: 'CmdOrCtrl+W',
       role: 'close'
-    }]
+          }]
   }]
 
   const menu = Menu.buildFromTemplate(template)
@@ -105,3 +116,13 @@ ipcMain.on('async-fetchProgramList', (event, args) => {
 ipcMain.on('async-fetchReservedList', (event, args) => {
   nasne.fetchReservedList(event, args.ip)
 })
+
+function showAbout() {
+  const aboutWindow = new BrowserWindow({
+    width: 275,
+    height: 160,
+    parent: mainWindow
+  })
+  let currentVersion = require('./package.json').version
+  aboutWindow.loadURL(`file://${__dirname}/renderer/about.html#${currentVersion}`)
+}
