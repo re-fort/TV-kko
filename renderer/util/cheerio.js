@@ -16,7 +16,7 @@ const cheerio = {
 
     cl.download
     .on('ready', stream => {
-      let file = name + '.jpg'
+      let file = `${name}.jpg`
       let savePath = path.join(imgDir, file)
       stream.pipe(fs.createWriteStream(savePath))
     })
