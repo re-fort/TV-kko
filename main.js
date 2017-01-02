@@ -120,7 +120,11 @@ ipcMain.on('async-fetchReservedList', (event, args) => {
 function showAbout() {
   const aboutWindow = new BrowserWindow({
     width: 275,
+    minWidth: 275,
+    maxWidth: 275,
     height: 160,
+    minHeight: 160,
+    maxHeight: 160,
     parent: mainWindow
   })
   let currentVersion = require('./package.json').version
