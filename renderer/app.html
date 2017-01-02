@@ -28,7 +28,7 @@
             <span class="icon icon-user" @click="showType = 'user'" title="タレントを登録します。"></span>
             <span class="icon icon-monitor" @click="showType = 'program'" title="番組・除外番組を登録します。"></span>
             <span id="show-modal" class="icon icon-cog" @click="showSettingModal=true" title="設定を行います。"></span>
-            <span class="icon icon-arrows-ccw" :class="myNasneIp !== '' ? '' : 'disabled'" @click="fetchReservedList()" title="nasneの録画予約情報を更新します。"></span>
+            <span class="icon icon-arrows-ccw" :class="isConnectedNasne === true ? '' : 'disabled'" @click="fetchReservedList()" title="nasneの録画予約情報を更新します。"></span>
           </li>
         </ul>
         <template v-if="showType === 'user'">
@@ -208,7 +208,7 @@
                 <label>nasne設定(IP)</label>
               </li>
               <li>
-                <input class="form-control" type="text" placeholder="192.168.11.1" v-model="myNasneIp" @change="setLocalStorage()" />
+                <input class="form-control" type="text" placeholder="192.168.11.1" v-model="myNasneIp" @change="setLocalStorage();isConnectedNasne = true" />
               </li>
             </ul>
           </div>

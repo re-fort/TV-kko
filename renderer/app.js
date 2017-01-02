@@ -62,6 +62,7 @@ new Vue({
         }
       ],
       myNasneIp: '',
+      isConnectedNasne: false,
       name: '',
       prefectures: [],
       casts: [],
@@ -125,8 +126,9 @@ new Vue({
     })
 
     ipcRenderer.on('async-fetchReservedList-reply', (ev, arg) => {
-      if (arg.error) {
+      if (arg.error && this.isConnectedNasne === true) {
         alert('nasneの録画予約情報更新に失敗しました。')
+        this.isConnectedNasne = false
       }
       
       this.scheduledList = arg.list
@@ -163,6 +165,7 @@ new Vue({
       if (selectedAutoCheckTime !== '') this.autoCheckTime = selectedAutoCheckTime
       if (selectedNasneIp !== '') this.myNasneIp = selectedNasneIp
 
+      this.isConnectedNasne = this.myNasneIp === '' ? false : true 
       this.prefectures = prefecturesJSON
       this.casts = castsJSON
       this.getMyCasts()
